@@ -46,22 +46,23 @@ def run_tests():
 
         if filename.endswith('.dbn'):
             seq, dbn = read_dbn(os.path.join(test_dir, filename))
+            n = len(seq)
             
             # Skip over any sequence that has 'N' (which indicates sequencing wasn't accurate)
             valid = True if (set(seq) == {'A', 'C', 'G', 'U'}) else False 
 
             # Only consider sequences with length <= 120 
-            if(len(seq) > 120 or not valid): 
+            if(n > 120 or not valid): 
                 continue
 
             num_tests_ran+=1
 
             pred_dbn = Nussinov(seq)
 
-            threshold_score = 0.6*len(seq) # At least 60% of the pairs must be correct (arb value)
+            threshold_score = 0.6*n # At least 60% of the pairs must be correct (arb value)
 
-            correct, incorrect, missing = compare_dbn(dbn, pred_dbn)
-            seq_score = (correct/(correct+incorrect+missing))
+            correct = compare_dbn(dbn, pred_dbn)
+            seq_score = (correct/n)
 
             print(f'{filename}: {seq_score}')
             print(f'Threshold score: {threshold_score}')
