@@ -84,5 +84,10 @@ def Nussinov(Text : str) -> str:
   return dotBracket(Text, pairs)
 
 if __name__ == "__main__":
-  open("output.txt", "w").write(Nussinov(sys.argv[1]))
+  open("output.txt", "w").write(Nussinov("CGAGGUGCCCUCUCGAACCGGCUGAUAGAAGCGUCGUAACUCCGAUCUUCCCAGUUCAGAGGGCACUUCUAUCUCCGGGGUCCCGUCGAGCCGAGCUUCGUCGGUGGAUCGAG"))
+
+
+
+# if __name__ == "__main__":
+#   print(Nussinov(sys.argv[1]))
 
