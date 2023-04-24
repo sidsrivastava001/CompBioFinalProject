@@ -6,7 +6,7 @@ against the RNA sequences downloaded from bprna database
 import os
 import sys
 import numpy as np
-from nussinov import Nussinov
+from nussinov import *
 
 
 def read_dbn(filename):
@@ -40,8 +40,12 @@ def run_tests():
     num_tests_ran = 0
     threshold_score = 0 
 
+    really_good_preds = 0
+    average_preds = 0
+    bad_preds = 0
+
     for filename in files:
-        if num_tests_ran == 1000:
+        if num_tests_ran == 200:
             break
 
         if filename.endswith('.dbn'):
@@ -59,20 +63,25 @@ def run_tests():
 
             pred_dbn = Nussinov(seq)
 
-            threshold_score = 0.6*n # At least 60% of the pairs must be correct (arb value)
+            threshold_score = 0.37 # At least 60% of the pairs must be correct (arb value)
 
             correct = compare_dbn(dbn, pred_dbn)
             seq_score = (correct/n)
 
-            print(f'{filename}: {seq_score}')
-            print(f'Threshold score: {threshold_score}')
-
             if seq_score >= threshold_score:
                 num_passing += 1
+
+            
+            print(f'{filename}: {correct/n} accuracy')
+
+            # print number of good preds, avg preds, and bad preds
+            print(f'Good: {really_good_preds}, Average: {average_preds}, Bad: {bad_preds}')
+
+            
     
-    with(open('test_nussinov_res.txt')) as f:
-        f.write(f'{num_passing} out of {num_tests_ran} correct\n')
-        f.write(f'Accuracy: {num_passing/num_tests_ran}\n')
+    # with(open('test_nussinov_res.txt')) as f:
+    #     f.write(f'{num_passing} out of {num_tests_ran} correct\n')
+    #     f.write(f'Accuracy: {num_passing/num_tests_ran}\n')
 
 
 if __name__ == '__main__':

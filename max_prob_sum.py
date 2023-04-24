@@ -40,8 +40,41 @@ def MaximumProbabilitySum(probL, probR, probP, seq):
         N[i][j] = 0
       else:
         N[i][j] = max(
-          N[i + 1][j] + probP[i], N[i][j - 1] + probP[j], N[i + 1][j - 1] +
-          computePairScores(seq[i], seq[j], i, j, probL, probR, probP),
+          N[i + 1][j] + probP[i],
+          N[i][j - 1] + probP[j], 
+          N[i + 1][j - 1] + computePairScores(seq[i], seq[j], i, j, probL, probR, probP),
           max([N[i][k] + N[k + 1][j] for k in range(i, j)]))
   return N
 
+# Backtracking function to find the optimal dot bracket representation of the RNA sequence
+# from the DP table
+def BackTrack(i, j, fold, N, seq):
+  if i >= j:
+    return
+  elif N[i][j] == N[i + 1][j] + probP[i]:
+    BackTrack(i + 1, j, fold, N, seq)
+  elif N[i][j] == N[i][j - 1] + probP[j]:
+    BackTrack(i, j - 1, fold, N, seq)
+  elif N[i][j] == (N[i + 1][j - 1] + computePairScores(seq[i], seq[j], i, j, probL, probR, probP)):
+    fold[i] = '('
+    fold[j] = ')'
+    BackTrack(i + 1, j - 1, fold, N, seq)
+  else:
+    for k in range(i + 1, j - 1):
+      if N[i][j] == N[i][k] + N[k + 1][j]:
+        BackTrack(i, k, fold, N, seq)
+        BackTrack(k + 1, j, fold, N, seq)
+        break
+
+  return fold
+
+# Main function to run the Enhanced Nussinov algorithm
+def EnhancedNussinov(probL, probR, probP, seq):
+  n = len(seq)
+  N = MaximumProbabilitySum(probL, probR, probP, seq)
+  fold = ['.' for i in range(n)]
+  fold = BackTrack(0, n - 1, fold, N, seq)
+  return ''.join(fold)
+
+
+    
