@@ -85,5 +85,14 @@ def run_tests():
 
 
 if __name__ == '__main__':
-    run_tests()
+    with open('./zucker.txt', 'r') as file:
+        numeric_values = []
+        for line in file:
+            numeric_value = float(line.split(':')[1].strip())
+            numeric_values.append(numeric_value)
+    
+    avg = (sum(numeric_values)/(len(numeric_values)))
+    print(avg)
+        
+
             

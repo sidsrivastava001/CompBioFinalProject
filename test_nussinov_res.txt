@@ -1,2 +1,0 @@
-342 out of 1000 correct
-Accuracy: 0.342 
